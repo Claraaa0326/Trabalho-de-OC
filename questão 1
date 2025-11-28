@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     int n, i;
@@ -21,12 +21,12 @@ int main() {
     }
 
     // Soma bit a bit (da direita para a esquerda)
-    for (i = n-1; i >= 0; i--) {
+    for (i = n-1; i >= 0; i--) { //soma começa pelo LSB
         int soma = A[i] + B[i] + carry;
         C[i+1] = soma % 2;   // bit resultante (garante que o bit resultante seja sempre 0 ou 1
         carry = soma / 2;    // transporte (carry)
     }
-    C[0] = carry;  // bit mais significativo
+    C[0] = carry;  // garante que o carry seja colocado na posiçao mais á esquerda
 
     // Impressão do resultado
     printf("Resultado da soma em binario: ");
@@ -37,3 +37,4 @@ int main() {
 
     return 0;
 }
+
