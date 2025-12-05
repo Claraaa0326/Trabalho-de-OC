@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+int complementoParaInt(int *v, int n) {
+    int valor = 0;
+
+    
+    for (int i = 0; i < n; i++) { // converte o numero como se fosse sem sinal
+        valor = (valor << 1) | v[i];
+    }
+
+    if (v[0] == 1) { // se o MSB for 1, o numero e negativo
+        valor -= (1 << n);  // justa para complemento de 2
+    }
+
+    return valor;
+}
+
+// Converte inteiro para vetor binário (complemento de 2)
+void intParaComplemento(long long valor, int *v, int n) {
+    unsigned long long mask = ((unsigned long long)1 << n) - 1; // máscara para n bits
+    unsigned long long bin = valor & mask; // variavel auxiliar que contem os bits menos significativos
+    for (int i = n - 1; i >= 0; i--) {
+        v[i] = bin & 1; 
+        bin >>= 1;
+    }
+}
+
+int main() {
+    int n = 8; // número de bits
+    int A[8], B[8];
+    int C[16]; // resultado vai ter 2n bits
+
+    printf("Digite os %d bits do primeiro número:\n", n); // com espaço entre os numeros 
+    for (int i = 0; i < n; i++) scanf("%d", &A[i]);
+
+    printf("Digite os %d bits do segundo número:\n", n); // com espaço entre os numeros
+    for (int i = 0; i < n; i++) scanf("%d", &B[i]);
+
+    int a = complementoParaInt(A, n);
+    int b = complementoParaInt(B, n);
+    long long multiplicacao = (long long)a * (long long)b;
+
+
+    
+    // Verificar overflow para 2n bits
+    long long min = -((long long)1 << (2 * n - 1)); // valor minimo representavel em complemento de 2 com 2n bits.
+    long long max = ((long long)1 << (2 * n - 1)) - 1; // valor maximo representável em complemento de 2 com 2n bits.
+ 
+    if (multiplicacao < min || multiplicacao > max) {
+        printf("Erro: overflow, resultado não cabe em %d bits.\n", n); // nao cabe no espaço de memoria reservado
+        return 1;
+    }
+      intParaComplemento(multiplicacao, C, 2*n);
+
+    // Mostrar resultado
+    printf("Resultado da multiplicação: %lld\n", multiplicacao);
+    printf("Representação binária (%d bits): ", 2*n);
+    for (int i = 0; i < 2*n; i++) {
+        printf("%d", C[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+    
+    
+  
