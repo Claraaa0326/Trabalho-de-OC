@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+int bcdParaInt(int *v, int n) { // converte binario bcd oara
+    int valor = 0;
+
+
+    for (int d = 0; d < n/4; d++) { // converte o numero como se fosse sem sinal
+       int digito = v[4*d]*8 + v[4*d+1]*4 + v[4*d+2]*2 + v[4*d+3];
+       valor = valor * 10 + digito;
+    }
+     return valor;
+}
+
+   void intParabcd (long long valor, int *v, int n) {
+    int numDigitos = n/4;
+
+      for ( int d= numDigitos - 1; d>= 0; d--) {
+        int digito = valor % 10;
+        valor = valor / 10;
+        v[4*d]   = (digito >> 3) & 1;
+        v[4*d+1] = (digito >> 2) & 1;
+        v[4*d+2] = (digito >> 1) & 1;
+        v[4*d+3] = digito & 1;
+
+
+      }
+   }
+
+// Converte inteiro para vetor binário (complemento de 2)
+void intParaComplemento(long long valor, int *v, int n) {
+    unsigned long long mask = ((unsigned long long)1 << n) - 1; // máscara para n bits
+    unsigned long long bin = valor & mask; // variavel auxiliar que contem os bits menos significativos
+    for (int i = n - 1; i >= 0; i--) {
+        v[i] = bin & 1;
+        bin >>= 1;
+    }
+}
+
+int main() {
+    int n = 16; // número de bits
+    int A[16], B[16];
+    int C[20]; // resultado tera ate 5 digitos
+
+    printf("Digite os %d bits do primeiro número BCD:\n", n); // com espaço entre os numeros
+    for (int i = 0; i < n; i++)
+    scanf("%d", &A[i]);
+
+    printf("Digite os %d bits do segundo número:\n", n); // com espaço entre os numeros
+    for (int i = 0; i < n; i++)
+    scanf("%d", &B[i]);
+
+    int a = bcdParaInt(A, n);
+    int b = bcdParaInt(B, n);
+
+    long long soma = (long long)a + (long long)b;
+
+   intParabcd(soma, C, n+4); //converte o resultado para bcd
+
+
+    printf("Resultado da soma: %lld\n", soma);
+    printf("Representação binária BCD (%d bits): ",n+4);
+    for (int i = 0; i < n+4; i++) {
+        printf("%d", C[i]);
+    }
+
+
+    return 0;
+}
