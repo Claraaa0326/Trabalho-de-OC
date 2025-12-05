@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+int bcdParaInt(int *v, int n) { // funçao que converte bcd para binario 
+    int valor = 0;
+    int numdigitos = n/4;
+
+    
+    for (int d = 0; d < n/4; d++) { // converte o numero como se fosse sem sinal
+       int digito = v[4*d]*8 + v[4*d+1]*4 + v[4*d+2]*2 + v[4*d+3];
+       valor = valor * 10 + digito;
+    }
+     return valor;
+}
+
+   void intParabcd (int valor, int *v, int n) { 
+    int numDigitos = n/4;
+      
+      for ( int d= numDigitos - 1; d>= 0; d--) {
+        int digito = valor % 10;
+        valor = valor / 10;
+        v[4*d]   = (digito >> 3) & 1;
+        v[4*d+1] = (digito >> 2) & 1;
+        v[4*d+2] = (digito >> 1) & 1;
+        v[4*d+3] = digito & 1;
+
+
+      }
+   }
+
+
+
+int main() {
+    int n = 8; // número de bits
+    int A[8], B[8], C[8];
+   
+    printf("Digite os %d bits do primeiro numero BCD:\n", n); // com espaço entre os numeros 
+        for (int i = 0; i < n; i++) {
+    scanf("%d", &A[i]); 
+        }
+
+    printf("Digite os %d bits do segundo numero:\n", n); // com espaço entre os numeros
+    for (int i = 0; i < n; i++) {
+    scanf("%d", &B[i]);
+    }
+
+    int a = bcdParaInt(A,n);
+    int b = bcdParaInt(B,n);
+        
+
+    if (a <b ) {
+        printf("subtraçao invalida\n");
+        return 1;
+    }
+    
+   int resultado = a - b;
+   intParabcd(resultado,C,n);
+    printf("Resultado da subtraçao: %d\n", resultado);
+    printf("Representação binaria BCD (%d bits): ",n);
+    for (int i = 0; i < n; i++) {
+        printf("%d", C[i]);
+    }
+   
+
+    return 0;
+}
