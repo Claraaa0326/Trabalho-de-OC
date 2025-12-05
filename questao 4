@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+int complementoParaInt(int *v, int n) {
+    int valor = 0;
+
+    
+    for (int i = 0; i < n; i++) { // converte o numero como se fosse sem sinal
+        valor = (valor << 1) | v[i];
+    }
+
+    if (v[0] == 1) { // se o MSB for 1, o numero e negativo
+        valor -= (1 << n);  // justa para complemento de 2
+    }
+
+    return valor;
+}
+
+// Converte inteiro para vetor binario (complemento de 2)
+void intParaComplemento(int valor, int *v, int n) {
+    unsigned int mask = (1 << n) - 1; // mascara para n bits
+    unsigned int bin = valor & mask; // variavel auxiliar que contem os bits menos significativos
+    for (int i = n - 1; i >= 0; i--) {
+        v[i] = bin & 1; 
+        bin >>= 1;
+    }
+}
+
+int main() {
+    int n = 8; // numero de bits
+    int A[8], C[8], B[8];
+
+    printf("Digite os %d bits do primeiro número:\n", n); // com espaço entre os numeros 
+    for (int i = 0; i < n; i++) scanf("%d", &A[i]);
+
+    printf("Digite os %d bits do segundo número:\n", n); // com espaço entre os numeros
+    for (int i = 0; i < n; i++) scanf("%d", &B[i]);
+
+    int a = complementoParaInt(A, n);
+    int b = complementoParaInt(B, n);
+    int subtraçao = a - b;
+
+
+    
+    // Verificar overflow
+    int min = -(1 << (n-1)); // valor minimo representavel em complemento de 2 com n bits
+    int max = (1 << (n-1)) - 1; // valor maximo representável em complemento de 2 com n bits
+ 
+    if (subtraçao < min || subtraçao > max) {
+        printf("Erro: overflow, resultado não cabe em %d bits.\n", n); // nao cabe no espaço de memoria reservado
+        return 1;
+    }
+      intParaComplemento(subtraçao, C, n);
+
+    // Mostrar resultado
+    printf("Resultado da subtraçao: %d\n", subtraçao);
+    printf("Representação binária: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d", C[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+    
+    
+  
