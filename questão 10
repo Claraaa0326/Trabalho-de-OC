@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int binparaint(int *V, int bits) {
+int num = 0;
+for (int i = 0; i < bits; i++)
+num = (num << 1) | V[i];
+if (V[0] == 1)
+num -= (1 << bits);
+return num;
+}
+void intparabin(int n, int *V, int bits) {
+unsigned int val = (n < 0) ? (1u << bits) + n : n;
+for (int i = bits - 1; i >= 0; i--) {
+V[i] = val & 1;
+val >>= 1;
+}
+}
+void printHex(int *V, int bits) {
+printf("0x");
+for (int i = 0; i < bits / 4; i++) {
+int val = (V[i*4] << 3) | (V[i*4 + 1] << 2) | (V[i*4 + 2] << 1) | V[i*4 + 3];
+printf("%X", val);
+}
+printf("\n");
+}
+int subtrair(int *A, int *B, int *C, int bits) {
+int a = binparaint(A, bits);
+int b = binparaint(B, bits);
+int res = a - b;
+int max = (1 << (bits - 1)) - 1;
+int min = -(1 << (bits - 1));
+if (res > max || res < min)
+return 0;
+intparabin(res, C, bits);
+return 1;
+}
+int main() {
+int n;
+printf("Digite n (bits do numero hexadecimal): ");
+scanf("%d", &n);
+int bits = 4 * n;
+int A[bits], B[bits], C[bits];
+printf("Digite A (%d bits):\n", bits);
+for (int i = 0; i < bits; i++) scanf("%d", &A[i]);
+printf("Digite B (%d bits):\n", bits);
+for (int i = 0; i < bits; i++) scanf("%d", &B[i]);
+if (!subtrair(A, B, C, bits)) {
+printf("ERRO: Overflow na subtracao!\n");
+return 0;
+}
+printf("Resultado em hexadecimal: ");
+printHex(C, bits);
+return 0;
+}
