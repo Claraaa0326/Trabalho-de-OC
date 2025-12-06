@@ -8,7 +8,7 @@ num = (num << 1) | V[i];
 if (V[0] == 1)
 num -= (1 << bits);
 return num;
-}
+} 
 void intparabin(int n, int *V, int bits) {
 unsigned int val = (n < 0) ? (1u << bits) + n : n;
 for (int i = bits - 1; i >= 0; i--) {
