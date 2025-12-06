@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+ 
 int binparaint(int *V, int bits) {
 int num = 0;
 for (int i = 0; i < bits; i++)
